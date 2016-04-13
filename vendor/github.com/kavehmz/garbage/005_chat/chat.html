@@ -1,0 +1,61 @@
+<head>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+</head>
+
+<body>
+	<form class="pure-form" onsubmit="return false;">
+	    <fieldset>
+			<div class="pure-control-group">
+	            <input id="count" type="text" readonly="readonly" style="background:white">
+				<button id="login" type="button" class="pure-button pure-button-primary">Sign in</button>
+	        </div>
+	    </fieldset>
+
+		<fieldset>
+			<input type="text" placeholder="Type and press enter" id="message" onkeypress="handle(event)" autocomplete="off">
+		</fieldset>
+
+		<fieldset class="pure-group">
+	        <textarea id="chat" class="pure-input-1-1" placeholder="Messages" readonly="readonly" style="background:white"></textarea>
+	    </fieldset>
+	</form>
+</body>
+
+<script>
+var ws = new WebSocket('ws://chat.kaveh.me:8080/chat');
+var result;
+
+ws.onmessage = function (msg) {
+   result = JSON.parse(msg.data);
+   console.log(result);
+   if (result['URL']) {
+		document.getElementById("login").addEventListener("click", function() {
+			window.open(result['URL']);
+		});
+   }
+
+   var msgArea=document.getElementById("chat")
+   if (result['message']) {
+	   msgArea.value=msgArea.value+"["+result['user']+"] says: "+result['message']+"\n"
+   }
+
+   if (result['count']) {
+	   document.getElementById("count").value=result['count'] +" users online"
+   }
+
+   if (result['gihthub_user']) {
+	   document.getElementById("login").outerHTML = "You are: "+ result['gihthub_user']
+   }
+};
+
+function handle(e){
+	if(e.keyCode === 13){
+		ws.send(JSON.stringify({
+			"message": document.getElementById("message").value
+		}))
+		document.getElementById("message").value=""
+	}
+	return false;
+}
+
+</script>
