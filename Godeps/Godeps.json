@@ -1,0 +1,9 @@
+{
+	"ImportPath": "github.com/kmzarc/shortsite",
+	"GoVersion": "go1.6",
+	"Packages": [
+		"./cmd/..."
+	],
+	"Deps": [
+	]
+}
