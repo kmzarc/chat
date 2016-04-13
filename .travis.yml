@@ -1,0 +1,14 @@
+language: go
+go:
+  - 1.6
+services:
+  - redis-server
+install:
+  - go get github.com/garyburd/redigo/redis
+  - go get github.com/asaskevich/govalidator
+  - go get github.com/kavehmz/short
+  - REDISURL="redis://localhost:6379/0" HOST="https://localhost/" PORT="8080" go run cmd/shortsite/main.go &
+  - sleep 2
+  - . ./travis.sh
+script:
+  - if [ "$RES" == '{"short":"https://localhost/5", "error":""}' ];then  true; else echo $RES; false; fi
