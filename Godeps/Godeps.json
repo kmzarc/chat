@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/kmzarc/shortsite",
+	"ImportPath": "github.com/kmzarc/chat",
 	"GoVersion": "go1.6",
 	"Packages": [
 		"./cmd/..."
